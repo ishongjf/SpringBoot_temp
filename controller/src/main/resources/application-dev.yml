@@ -1,0 +1,205 @@
+server:
+  port: 9001 #端口
+  max-http-header-size: 10240 #请求头最大值
+  servlet:
+    context-path: /controller #项目访问前缀
+  tomcat:
+    uri-encoding: UTF-8 #编码
+    max-connections: 10000 # Maximum number of connections that the server accepts and processes at any given time.
+    max-http-post-size: 2MB # Maximum size, in bytes, of the HTTP post content.
+    max-threads: 200 # Maximum number of worker threads.
+    min-spare-threads: 10 # Minimum number of worker threads.
+    accesslog:
+      enabled: false
+      directory: log
+    basedir: .
+spring:
+  profiles:
+    active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    location: /data/upload_tmp #临时文件存储位置
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB #文件上传最大值
+  messages:
+    encoding: utf-8
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      username:
+      password:
+      url: jdbc:mysql://localhost:3306/artisan?autoReconnect=true&rewriteBatchedStatements=true&socketTimeout=30000&connectTimeout=3000&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false
+      initial-size: 11
+      max-active: 20
+      min-idle: 1
+      max-wait: 60000
+      validation-query: select 'x'
+      validationQueryTimeout: 5
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      filters: log4j
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        slf4j:
+          enabled: true
+          connection-log-enabled: true
+          connection-close-after-log-enabled: true
+          connection-commit-after-log-enabled: true
+          connection-connect-after-log-enabled: true
+          connection-connect-before-log-enabled: true
+          connection-log-error-enabled: true
+          data-source-log-enabled: true
+          result-set-log-enabled: true
+          statement-log-enabled: true
+        wall:
+          enabled: true
+          config:
+            alter-table-allow: false
+            truncate-allow: false
+            drop-table-allow: false
+            #是否允许非以上基本语句的其他语句，缺省关闭，通过这个选项就能够屏蔽DDL
+            none-base-statement-allow: false
+            #检查UPDATE语句是否无where条件，这是有风险的，但不是SQL注入类型的风险
+            update-where-none-check: true
+            #SELECT ... INTO OUTFILE 是否允许，这个是mysql注入攻击的常见手段，缺省是禁止的
+            select-into-outfile-allow: false
+            #是否允许调用Connection.getMetadata方法，这个方法调用会暴露数据库的表信息
+            metadata-allow: true
+            #允许多条sql一起执行
+            multiStatementAllow: true
+          #对被认为是攻击的SQL进行LOG.error输出
+          log-violation: true
+          #对被认为是攻击的SQL抛出SQLExcepton
+          throw-exception: true
+          #db-type: mysql
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        #你可以配置principalSessionName，使得druid能够知道当前的cookie的用户是谁
+        #principal-cookie-name: admin
+        #你可以配置principalSessionName，使得druid能够知道当前的session的用户是谁
+        #principal-session-name: admin
+        #设置profileEnable能够监控单个url调用的sql列表
+        profile-enable: true
+        #session统计功能
+        session-stat-enable: false
+        #最大session数
+        session-stat-max-count: 100000
+      stat-view-servlet:
+        #allow: ${GATEWAY_HOST:172.26.114.241}
+        enabled: true
+        login-username: admin
+        login-password: admin
+        url-pattern: /druid/*
+        #允许清除记录
+        reset-enable: false
+        aop-pattrns: com.hongjf.service.*
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 500ms
+    jedis:
+      pool:
+        max-active: 25
+        max-idle: 25
+        max-wait: 25ms
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+    publisher-returns: true #消息发送到交换机确认机制 是否返回回调
+    template:
+      mandatory: true #设置为 true 后 消费者在消息没有被路由到合适队列情况下会被return监听，而不会自动删除
+    listener:
+      simple:
+        prefetch: 1 #每次获取消息的条目数
+        concurrency: 10 #最小并发消费者数量
+        max-concurrency: 20 #最大并发消费者数量
+        auto-startup: true
+        acknowledge-mode: manual
+      direct:
+        acknowledge-mode: manual
+    key:
+      driectKey: tempKey
+    exchange:
+      driectExchange: tempExchange
+#mybatis-plus配置
+mybatis-plus:
+  #实体类位置
+  typeAliasesPackage: com.hongjf.basics.entity
+  #xml位置
+  mapper-locations: classpath*:mybatis/mapper/**/*.xml
+  configuration:
+    #驼峰下划线转换
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+      id-type: auto
+      #逻辑删除配置
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #刷新mapper 调试神器
+    refresh-mapper: true
+
+#日志文件
+logging:
+  config: classpath:logback-spring.xml
+
+#微信配置信息
+wx:
+  #小程序appId
+  appId:
+  #小程序secret
+  secret:
+  #商户id
+  mchId:
+  #商户key
+  mchKey:
+  #微信支付回调接口
+  notifyUrl:
+  #企业红包路径
+  wxPayUrl: https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers
+  #企业付款证书路径
+  payFileUrl:
+#阿里云配置
+aliyun:
+  oss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com #endpoint
+    accessKeyId:
+    accessKeySecret:
+    bucket:
+    resUrl: https://${aliyun.oss.bucket}.${aliyun.oss.endpoint}/ #url
+  sms:
+    accessKeyId:
+    accessKeySecret:
+    signName:
+    identityTemplateCode:
+    loginTemplateCode:
+    loginExceptionTemplateCode:
+    registeredTemplateCode:
+    midPasswordTemplateCode:
+    updateInfoTemplateCode:
