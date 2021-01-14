@@ -43,7 +43,7 @@
         <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
         <jwt.version>0.9.0</jwt.version>
         <jfinal.version>2.4</jfinal.version>
-        <poi.version>3.10-FINAL</poi.version>
+        <poi.version>4.1.2</poi.version>
         <commons.io.version>2.6</commons.io.version>
         <commons.lang3.version>3.8.1</commons.lang3.version>
     </properties>
