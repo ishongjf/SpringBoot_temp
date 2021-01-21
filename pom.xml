@@ -37,7 +37,7 @@
         <lombok.version>1.18.8</lombok.version>
         <log4j.version>1.2.16</log4j.version>
         <userAgentUtils.version>1.21</userAgentUtils.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.12.1</jackson.version>
         <aliyun.oss.version>2.8.3</aliyun.oss.version>
         <aliyun.sdk.core.version>4.5.1</aliyun.sdk.core.version>
         <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
