@@ -29,7 +29,7 @@
         <springboot.start.version>2.2.7.RELEASE</springboot.start.version>
         <junit.version>4.13.1</junit.version>
         <fastjson.version>1.2.83</fastjson.version>
-        <mysql.version>8.0.11</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <modelmapper.version>2.3.5</modelmapper.version>
         <hutool-http.version>5.7.19</hutool-http.version>
         <mybatis-plus.version>3.3.0</mybatis-plus.version>
